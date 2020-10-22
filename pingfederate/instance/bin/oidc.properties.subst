@@ -170,7 +170,7 @@ role.admin.2=admin
 role.cryptoManager.1=fullAdmin
 role.cryptoManager.2=cryptoAdmin
 role.userAdmin.1=fullAdmin
-role.userAdmin.1=userAdmin
+role.userAdmin.2=userAdmin
 role.expressionAdmin.1=fullAdmin
 role.expressionAdmin.2=expressionAdmin
 
