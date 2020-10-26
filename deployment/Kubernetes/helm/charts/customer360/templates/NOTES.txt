@@ -1,0 +1,4 @@
+{{ include "pingdevops.notes.header" . }}
+
+PF Envs: {{ (index .Values "pingfederate-admin").envs }}
+{{ include "pingdevops.notes.footer" . }}

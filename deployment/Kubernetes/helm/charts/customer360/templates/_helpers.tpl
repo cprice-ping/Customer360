@@ -68,10 +68,10 @@ Playing with Helper Templates for Use Case processing
 
 {{/* Used to put the right TLD on the P1 URLs based on the Region */}}
 {{- define "customer360.pingOneTld" -}}
-    {{ if .Values.global.pingOne.usePingOneServices }}
-        {{- if eq ( default "NA" .Values.global.pingOne.envRegion ) "EU" }}
+    {{ if .Values.pingOne.usePingOneServices }}
+        {{- if eq ( default "NA" .Values.pingOne.envRegion ) "EU" }}
             {{- print "eu" }}
-        {{- else if eq ( default "NA" .Values.global.pingOne.envRegion ) "AP" }}
+        {{- else if eq ( default "NA" .Values.pingOne.envRegion ) "AP" }}
             {{- print "asia" }}
         {{- else }}
             {{- print "com" }}
@@ -81,12 +81,12 @@ Playing with Helper Templates for Use Case processing
 
 {{/* Used to create the Admin Console Client URLs used in Software */}}
 {{- define "customer360.pingOneAdminUrl" }}
-    {{- print "https://auth.pingone." }}{{ include "customer360.pingOneTld" . }}{{ print "/" .Values.global.pingOne.adminConsole.envId "/as" }}
+    {{- print "https://auth.pingone." }}{{ include "customer360.pingOneTld" . }}{{ print "/" .Values.pingOne.adminConsole.envId "/as" }}
 {{- end }}
 
 {{/* Used to build the additional URLs passed into the job/pingconfig */}}
 {{- define "customer360.useCaseUrls" -}}
-    {{- $useCaseGlobal :=  .Values.global.useCases }}
+    {{- $useCaseGlobal :=  .Values.useCases }}
     {{- $useCaseDetails := .Values.collections.useCases }}
     {{- $merged := merge $useCaseDetails $useCaseGlobal }}
     {{- printf .Values.collections.solutions.customer360.url }},
@@ -99,7 +99,7 @@ Playing with Helper Templates for Use Case processing
 
 {{/* Used to build the of the collections URLs passed into the job/pingconfig */}}
 {{- define "customer360.useCaseNames" -}}
-    {{- $useCaseGlobal :=  .Values.global.useCases }}
+    {{- $useCaseGlobal :=  .Values.useCases }}
     {{- $useCaseDetails := .Values.collections.useCases }}
     {{- $merged := merge $useCaseDetails $useCaseGlobal }}
     {{- printf .Values.collections.solutions.customer360.name }}{{- print " --> "}}  
@@ -118,38 +118,3 @@ Playing with Helper Templates for Use Case processing
         {{- .Release.Name }}{{- print }}.ping-devops.com
     {{- end }}
 {{- end }}
-
-
-
-{{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "pingdelegator.name" -}}
-{{- default .Chart.Name .Values.pingdelegator.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "pingdelegator.fullname" -}}
-{{- if .Values.pingdelegator.fullnameOverride -}}
-{{- .Values.pingdelegator.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.pingdelegator.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "pingdelegator.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}

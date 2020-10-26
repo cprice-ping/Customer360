@@ -2,6 +2,8 @@
 
 # Default values for Customer360.
 global:
+  env:
+    PING_IDENTITY_ACCEPT_EULA: "YES"
   # PingOne Service Details
   pingOne:
     # Set to `true` if you are supplying your PingOne details 
@@ -34,37 +36,13 @@ global:
 # License files should be injected into your kubernetes namespace as secrets:
   # (Eval)   ping-devops generate license {product} | kubectl apply -f -
   # (Real)   ping-devops generate license-secret {license file} | kubectl apply -f -
-pingfederate:
-  pingdevops:
-    license:
-      # If set to false, licenses must be mounted as secrets
-      useDevOpsKey: false
-      ## Accept the Ping EULA -- "YES" | (default) "NO" (Note: this will not allow Products to launch)
-      acceptEULA: "NO"
-
 pingdirectory:
-  pingdevops:
-  # Variables used to determine licensing for the stack
-    license:
-      # If set to false, licenses must be mounted as secrets
-      useDevOpsKey: false
-      ## Accept the Ping EULA -- "YES" | (default) "NO" (Note: this will not allow Products to launch)
-      acceptEULA: "NO"
+  envs:
+    SERVER_PROFILE_URL: https://github.com/pingidentity/customer360.git
+    SERVER_PROFILE_PATH: pingdirectory
+
 
 pingdatasync:
-  pingdevops:
-    # Variables used to determine licensing for the stack
-    license:
-      # If set to false, licenses must be mounted as secrets
-      useDevOpsKey: false
-      ## Accept the Ping EULA -- "YES" | (default) "NO" (Note: this will not allow Products to launch)
-      acceptEULA: "NO"
-
-pingcentral:
-  pingdevops:
-    # Variables used to determine licensing for the stack
-    license:
-      # If set to false, licenses must be mounted as secrets
-      useDevOpsKey: false
-      ## Accept the Ping EULA -- "YES" | (default) "NO" (Note: this will not allow Products to launch)
-      acceptEULA: "NO"
+  envs:
+    SERVER_PROFILE_URL: https://github.com/pingidentity/customer360.git
+    SERVER_PROFILE_PATH: pingdatasync

@@ -21,35 +21,35 @@ spec:
       paths:
        - backend:
            serviceName: {{ .Release.Name }}-pingaccess
-           servicePort: 9000
+           servicePort: {{ include "pingports.paAdminPort" . }}
   # This rule gives external access to the PingFederate Admin Console
   - host: pingfederate-{{ .Release.Name }}.ping-devops.com
     http:
       paths:
        - backend:
-          serviceName: {{ .Release.Name }}-pingfederate
-          servicePort: {{ .Values.pingfederate.service.admin.port }}
+          serviceName: {{ .Release.Name }}-pingfederate-admin
+          servicePort: {{ include "pingports.pfAdminPort" . }}
   # This rule gives external access to the PingData Admin Console
   - host: pingdataconsole-{{ .Release.Name }}.ping-devops.com
     http:
       paths:
        - backend:
           serviceName: {{ .Release.Name }}-pingdataconsole
-          servicePort: {{ .Values.pingdataconsole.service.http.port }}
+          servicePort: {{ include "pingports.pdConsolePort" . }}
   # This rule gives external access to the PingDirectory Config API
   - host: pingdirectory-{{ .Release.Name }}.ping-devops.com
     http:
       paths:
        - backend:
            serviceName: {{ .Release.Name }}-pingdirectory
-           servicePort: {{ .Values.pingdirectory.service.https.port }}
+           servicePort:  {{ include "pingports.pdConfigPort" . }}
   # This rule gives external access to the PingCentral Admin Console
   - host: pingcentral-{{ .Release.Name }}.ping-devops.com
     http:
       paths:
        - backend:
           serviceName: {{ .Release.Name }}-pingcentral
-          servicePort: 9022
+          servicePort: {{ include "pingports.pcAdminPort" . }}
   tls:
     - hosts:
       - pingaccess-{{ .Release.Name }}.ping-devops.com

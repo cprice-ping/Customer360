@@ -25,27 +25,22 @@ data:
             },
             {
                 "key": "pdAdminUrl",
-                "value": "https://{{ .Release.Name }}-pingdirectory:{{ .Values.pingdirectory.service.https.port }}",
+                "value": "https://{{ .Release.Name }}-pingdirectory:{{ include "pingports.pdConfigPort" . }}",
                 "enabled": true
             },
             {
                 "key": "pdApis",
-                "value": "{{ .Release.Name }}-pingdirectory:{{ .Values.pingdirectory.service.apis.port }}",
+                "value": "{{ .Release.Name }}-pingdirectory:{{ include "pingports.pdApiPort" . }}",
                 "enabled": true
             },
             {
                 "key": "pdLdapHost",
-                "value": "{{ .Release.Name }}-pingdirectory:{{ .Values.pingdirectory.service.ldap.port }}",
-                "enabled": true
-            },
-            {
-                "key": "pdsAdminURL",
-                "value": "https://{{ .Release.Name }}-pingdatasync:{{ .Values.pingdatasync.service.https.port }}",
+                "value": "{{ .Release.Name }}-pingdirectory:{{ include "pingports.pdLdapPort" . }}",
                 "enabled": true
             },
             {
                 "key": "pfAdminURL",
-                "value": "https://{{ .Release.Name }}-pingfederate:{{ .Values.pingfederate.service.admin.port }}",
+                "value": "https://{{ .Release.Name }}-pingfederate-admin:{{ include "pingports.pfAdminPort" . }}",
                 "enabled": true
             },
             {
@@ -55,10 +50,10 @@ data:
             },
             {
                 "key": "pfRuntime",
-                "value": "{{ .Release.Name }}-pingfederate:{{ .Values.pingfederate.service.engine.port }}",
+                "value": "{{ .Release.Name }}-pingfederate-engine:{{ include "pingports.pfEnginePort" . }}",
                 "enabled": true
-            },{{- if .Values.global.useCases.paAsProxy.enabled }}
-            {{- if .Values.global.useCases.paAsProxy.useTrustedCert }}
+            },{{- if .Values.useCases.paAsProxy.enabled }}
+            {{- if .Values.useCases.paAsProxy.useTrustedCert }}
             {
                 "key": "acmeServerName",
                 "value": "Let's Encrypt",
@@ -81,14 +76,14 @@ data:
             },
             {
                 "key": "adminSsoClientId",
-                "value": {{ .Values.global.pingOne.adminConsole.adminAppId | quote }},
+                "value": {{ .Values.pingOne.adminConsole.adminAppId | quote }},
                 "enabled": true
             },
             {
                 "key": "adminSsoClientSecret",
-                "value": {{ .Values.global.pingOne.adminConsole.adminAppSecret | quote }},
+                "value": {{ .Values.pingOne.adminConsole.adminAppSecret | quote }},
                 "enabled": true
-            }{{ if .Values.global.pingOne.usePingOneServices }},
+            }{{ if .Values.pingOne.usePingOneServices }},
             {
                 "key": "pingOneAuthNURL",
                 "value": "https://auth.pingone.{{ include "customer360.pingOneTld" . }}",
@@ -101,34 +96,34 @@ data:
             },
             {
                 "key": "pingOneEnvId",
-                "value": {{ .Values.global.pingOne.environment.envId | quote }},
+                "value": {{ .Values.pingOne.environment.envId | quote }},
                 "enabled": true
             },
             {
                 "key": "pfWorkerId",
-                "value": {{ .Values.global.pingOne.environment.pfWorkerId | quote }},
+                "value": {{ .Values.pingOne.environment.pfWorkerId | quote }},
                 "enabled": true
             },
             {
                 "key": "pfWorkerSecret",
-                "value": {{ .Values.global.pingOne.environment.pfWorkerSecret | quote }},
+                "value": {{ .Values.pingOne.environment.pfWorkerSecret | quote }},
                 "enabled": true
             },
             {
                 "key": "mfaPopId",
-                "value": {{ .Values.global.pingOne.environment.mfaPopId | quote }},
+                "value": {{ .Values.pingOne.environment.mfaPopId | quote }},
                 "enabled": true
             },
             {
                 "key": "mfaAppId",
-                "value": {{ .Values.global.pingOne.environment.mfaAppId | quote }},
+                "value": {{ .Values.pingOne.environment.mfaAppId | quote }},
                 "enabled": true
             },
             {
                 "key": "mfaAppSecret",
-                "value": {{ .Values.global.pingOne.environment.mfaAppSecret | quote }},
+                "value": {{ .Values.pingOne.environment.mfaAppSecret | quote }},
                 "enabled": true
-            }{{ end }}{{ if .Values.global.useCases.delegatedAdministration.enabled }},
+            }{{ end }}{{ if .Values.useCases.delegatedAdministration.enabled }},
             {
                 "key": "delegatorApp",
                 "value": "{{ .Release.Name }}-pingdelegator:{{ .Values.pingdelegator.service.runtime.port }}",
