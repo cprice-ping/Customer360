@@ -102,6 +102,7 @@ pingfederate-admin:
     SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git
     SERVER_PROFILE_PATH: pingfederate
     SERVER_PROFILE_PARENT: ""
+    OPERATIONAL_MODE: CLUSTERED_CONSOLE
   logging: INFO
   services:
     # Allows OIDC callbacks to PF through the GSA Ingress
@@ -116,6 +117,8 @@ pingfederate-engine:
   envs:
     SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git
     SERVER_PROFILE_PATH: pingfederate
+    SERVER_PROFILE_PARENT: ""
+    OPERATIONAL_MODE: CLUSTERED_ENGINE
   logging: INFO
 
 pingdatasync:

@@ -1,4 +1,5 @@
 {{ include "pingdevops.notes.header" . }}
 
-PF Envs: {{ (index .Values "pingfederate-admin").envs }}
+PF Admin Envs: {{ (index .Values "pingfederate-admin").envs }}
+PF Engine Envs: {{ (index .Values "pingfederate-engine").envs }}
 {{ include "pingdevops.notes.footer" . }}
