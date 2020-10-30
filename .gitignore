@@ -4,3 +4,4 @@
 .vscode/settings.json
 **.DS_Store
 customer360**.tgz
+pingfederate/instance/server/default/.DS_Store

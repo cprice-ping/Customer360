@@ -80,8 +80,10 @@ is not recommended as it may interfere with expected server behavior.
                     <input id="passcode" type="text" class="text-input text-input--primary" data-id="text-input"
                            name="$otp" maxlength="6"
                            value="" oninput="checkInput()" onkeypress="return checkOtpOnReturn(event)"/>
+
                     <div class="form-aside">
                         <div class="stack" data-id="stack">
+                            #if($selectedDevice.type.toLowerCase() != "totp")
                             <div class="stack stack--small" data-id="stack">
                                 <div class="text-block" data-id="textblock">
                                     <div class="text-block--overflow-wrap">
@@ -93,12 +95,15 @@ is not recommended as it may interfere with expected server behavior.
                                     <div class="text-block--overflow-wrap">$selectedDevice.target</div>
                                 </div>
                             </div>
+                            #end
                             <div>
+                                #if($selectedDevice.type.toLowerCase() != "totp")
                                 <button class="button file-input--button button--tertiary" data-id="button"
                                         type="button" onclick="selectDevice('$selectedDevice.id')">
                                     $languagePackMessages.getMessage($deviceMessageKeyPrefix,
                                     "resend.button.title")
                                 </button>
+                                #end
                                 <input type="hidden" name="$selectedDeviceId" value=""/>
                             </div>
                         </div>

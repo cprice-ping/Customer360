@@ -78,6 +78,11 @@ spec:
         backend:
           serviceName: {{ .Release.Name }}-pingfederate-engine
           servicePort: {{ include "pingports.pfEnginePort" . }}
+      - path: /assets/
+        #pathType: Prefix
+        backend:
+          serviceName: {{ .Release.Name }}-pingfederate-engine
+          servicePort: {{ include "pingports.pfEnginePort" . }}
       # PingDirectory
       # Directory API
       - path: /directory/

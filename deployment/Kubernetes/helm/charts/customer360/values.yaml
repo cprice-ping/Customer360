@@ -5,13 +5,15 @@ global:
   # Your specific environment variables - values are injected into Server Profiles
   envs:
     # Ping Global Values
-    # Accept PingIdentity EULA - default is "NO", must be overridden with a values.yaml
-    PING_IDENTITY_ACCEPT_EULA: "YES"
     # Default Administrative Password - also passed to APIs as {{globalPwd}}
     PING_IDENTITY_PASSWORD: "2FederateM0re"
     # PD Variables
     ## BaseDN of the datastore
     USER_BASE_DN: "dc=customer360.com"
+
+  # If you'd like to separate the stack from other deployments in your namespace
+  # prepend | append | none  
+  addReleaseNameToResources: prepend
 
   api:
     # Set to "DEBUG" if you want to see the output of the API calls being made by pingconfig
@@ -57,6 +59,7 @@ useCases:
 # PingOne Service Details
 pingOne:
   # Set to `true` if you are supplying your PingOne details 
+  # C360 leverages PingOne MFA by default
   usePingOneServices: true
   # This configures the proper endpoints for My Ping and PingOne Service IKs
   # PingOne Regions - "NA" | "EU" | "AP"
@@ -88,12 +91,21 @@ pingOne:
   # (Eval)   ping-devops generate license {product} | kubectl apply -f -
   # (Real)   ping-devops generate license-secret {license file} | kubectl apply -f -
 pingdirectory:
-  logging: INFO
+  image:
+    tag: latest
   envs:
     SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git
     SERVER_PROFILE_PATH: pingdirectory
+  logging: INFO
   ingress:
     enabled: false
+  container:
+    replicaCount: 1
+  services:
+    https:
+      clusterService: true
+    apis:
+      clusterService: true
 
 pingfederate-admin:
   image:
@@ -104,6 +116,8 @@ pingfederate-admin:
     SERVER_PROFILE_PARENT: ""
     OPERATIONAL_MODE: CLUSTERED_CONSOLE
   logging: INFO
+  ingress:
+    enabled: false
   services:
     # Allows OIDC callbacks to PF through the GSA Ingress
     # Comment out `admin` section to default to :9999
@@ -119,20 +133,25 @@ pingfederate-engine:
     SERVER_PROFILE_PATH: pingfederate
     SERVER_PROFILE_PARENT: ""
     OPERATIONAL_MODE: CLUSTERED_ENGINE
+    PF_ADMIN_PORT: "443"
   logging: INFO
+  ingress:
+    enabled: false
 
 pingdatasync:
   image:
     tag: latest
-  logging: INFO
+
   envs:
     SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git
     SERVER_PROFILE_PATH: pingdatasync
+  logging: INFO
+  ingress:
+    enabled: false
 
 pingcentral:
   image:
     tag: latest
-  logging: INFO
   #tlsBlindTrust: true
   #tlsVerifyHostnames: false
   envs:
@@ -141,13 +160,14 @@ pingcentral:
     SERVER_PROFILE_PARENT: DATA
     SERVER_PROFILE_DATA_URL: https://github.com/pingidentity/Customer360.git
     SERVER_PROFILE_DATA_PATH: pingcentral/external-mysql-db
+  logging: INFO
 
 pingaccess:
   image:
     tag: latest
+  logging: INFO
 
 pingdelegator:
-  replicaCount: 1
   image:
     repository: pingidentity
     name: pingdelegator
