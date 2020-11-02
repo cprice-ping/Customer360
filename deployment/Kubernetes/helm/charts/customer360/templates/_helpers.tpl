@@ -79,6 +79,19 @@ Playing with Helper Templates for Use Case processing
     {{- end }}
 {{- end }}
 
+{{/* Used to put the right TLD on the P1 URLs based on the Region */}}
+{{- define "customer360.pingOneRegion" -}}
+    {{ if .Values.pingOne.usePingOneServices }}
+        {{- if eq ( default "NA" .Values.pingOne.envRegion ) "EU" }}
+            {{- print "eu" }}
+        {{- else if eq ( default "NA" .Values.pingOne.envRegion ) "AP" }}
+            {{- print "asia" }}
+        {{- else }}
+            {{- print "na" }}
+        {{- end}}
+    {{- end }}
+{{- end }}
+
 {{/* Used to create the Admin Console Client URLs used in Software */}}
 {{- define "customer360.pingOneAdminUrl" }}
     {{- print "https://auth.pingone." }}{{ include "customer360.pingOneTld" . }}{{ print "/" .Values.pingOne.adminConsole.envId "/as" }}

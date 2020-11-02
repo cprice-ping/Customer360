@@ -1,4 +1,5 @@
 {{ include "pingdevops.notes.header" . }}
+
 This chart installs the Customer360 Solution stack of Ping products that are applicable to CIAM use cases.
 More information: https://github.com/pingidentity/Customer360
 

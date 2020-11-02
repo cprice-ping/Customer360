@@ -95,6 +95,11 @@ data:
                 "enabled": true
             },
             {
+                "key": "pingOneRegion",
+                "value": {{ include "customer360.pingOneRegion" . | quote }},
+                "enabled": true
+            },
+            {
                 "key": "pingOneEnvId",
                 "value": {{ .Values.pingOne.environment.envId | quote }},
                 "enabled": true
