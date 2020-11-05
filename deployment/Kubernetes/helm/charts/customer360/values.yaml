@@ -13,12 +13,17 @@ global:
 
   # If you'd like to separate the stack from other deployments in your namespace
   # prepend | append | none  
-  addReleaseNameToResources: prepend
+  addReleaseNameToResource: prepend
 
   api:
     # Set to "DEBUG" if you want to see the output of the API calls being made by pingconfig
     # kubectl logs -f job/{{release name}}-pingconfig
     logLevel: "INFO"
+
+  # Determines if the DevOps Ingress config is applied
+  # Set to `false` for C360 to use a single Client-facing ingress to pul all front-channel services on one hostname
+  ingress:
+    enabled: false
 
   # Client Connection settings - by default, Ingress, DNS, Certificates are handled by k8s
   # PingAccess can be used instead by setting `useCases.paAsProxy: true` below
@@ -50,11 +55,11 @@ useCases:
     enabled: false
   # Configure PD Consent API and prep PF \ PA for Privacy Dashboard
   consentManagement: 
-    enabled: false
+    enabled: true
   # Configure PD for DelAdmin (Config and Users) and install Delegator
   # Server Profile: https://github.com/cprice-ping/Profile-DelAdmin
   delegatedAdministration: 
-    enabled: false
+    enabled: true
 
 # PingOne Service Details
 pingOne:
@@ -90,98 +95,80 @@ pingOne:
 # License files should be injected into your kubernetes namespace as secrets:
   # (Eval)   ping-devops generate license {product} | kubectl apply -f -
   # (Real)   ping-devops generate license-secret {license file} | kubectl apply -f -
-pingdirectory:
-  image:
-    tag: latest
-  envs:
-    SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git
-    SERVER_PROFILE_PATH: pingdirectory
-  logging: INFO
-  ingress:
-    enabled: false
-  container:
-    replicaCount: 1
-  services:
-    https:
-      clusterService: true
-    apis:
-      clusterService: true
+devops:
+  pingdirectory:
+    chartEnabled: true
+    envs:
+      SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git
+      SERVER_PROFILE_PATH: pingdirectory
+    logging: INFO
+    ingress:
+      enabled: false
+    container:
+      replicaCount: 1
+    services:
+      https:
+        clusterService: true
+      apis:
+        clusterService: true
+  
+  pingdataconsole:
+    chartEnabled: true
 
-pingfederate-admin:
-  image:
-    tag: latest
-  envs:
-    SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git
-    SERVER_PROFILE_PATH: pingfederate
-    SERVER_PROFILE_PARENT: ""
-    OPERATIONAL_MODE: CLUSTERED_CONSOLE
-  logging: INFO
-  ingress:
-    enabled: false
-  services:
-    # Allows OIDC callbacks to PF through the GSA Ingress
-    # Comment out `admin` section to default to :9999
-    admin:
-      port: 443
-      targetPort: 443
+  pingfederate-admin:
+    chartEnabled: true
+    envs:
+      SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git
+      SERVER_PROFILE_PATH: pingfederate
+      OPERATIONAL_MODE: CLUSTERED_CONSOLE
+    logging: INFO
+    ingress:
+      enabled: false
+    services:
+      # Allows OIDC callbacks to PF through the GSA Ingress
+      # Comment out `admin` section to default to :9999
+      admin:
+        port: 443
+        targetPort: 443
 
-pingfederate-engine:
-  image:
-    tag: latest
-  envs:
-    SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git
-    SERVER_PROFILE_PATH: pingfederate
-    SERVER_PROFILE_PARENT: ""
-    OPERATIONAL_MODE: CLUSTERED_ENGINE
-    PF_ADMIN_PORT: "443"
-  logging: INFO
-  ingress:
-    enabled: false
+  pingfederate-engine:
+    chartEnabled: true
+    envs:
+      SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git
+      SERVER_PROFILE_PATH: pingfederate
+      OPERATIONAL_MODE: CLUSTERED_ENGINE
+      PF_ADMIN_PORT: "443"
+    logging: INFO
+    ingress:
+      enabled: false
 
-pingdatasync:
-  image:
-    tag: latest
+  pingdatasync:
+    chartEnabled: true
+    envs:
+      SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git
+      SERVER_PROFILE_PATH: pingdatasync
+    logging: INFO
+    ingress:
+      enabled: false
 
-  envs:
-    SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git
-    SERVER_PROFILE_PATH: pingdatasync
-  logging: INFO
-  ingress:
-    enabled: false
+  pingcentral:
+    chartEnabled: true
+    tlsBlindTrust: true
+    tlsVerifyHostnames: false
+    envs:
+      SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git 
+      SERVER_PROFILE_PATH: pingcentral/logging
+      SERVER_PROFILE_PARENT: DATA
+      SERVER_PROFILE_DATA_URL: https://github.com/pingidentity/Customer360.git
+      SERVER_PROFILE_DATA_PATH: pingcentral/external-mysql-db
+    logging: INFO
 
-pingcentral:
-  image:
-    tag: latest
-  #tlsBlindTrust: true
-  #tlsVerifyHostnames: false
-  envs:
-    SERVER_PROFILE_URL: https://github.com/pingidentity/Customer360.git 
-    SERVER_PROFILE_PATH: pingcentral/logging
-    SERVER_PROFILE_PARENT: DATA
-    SERVER_PROFILE_DATA_URL: https://github.com/pingidentity/Customer360.git
-    SERVER_PROFILE_DATA_PATH: pingcentral/external-mysql-db
-  logging: INFO
+  pingaccess:
+    chartEnabled: false
+    logging: INFO
 
-pingaccess:
-  image:
-    tag: latest
-  logging: INFO
-
-pingdelegator:
-  image:
-    repository: pingidentity
-    name: pingdelegator
-    tag: latest
-    pullPolicy: IfNotPresent
-    readinessCommand: /opt/liveness.sh
-    livenessCommand: /opt/liveness.sh
-  nameOverride: "pingdelegator"
-  fullnameOverride: ""
-  service:
-    type: ClusterIP
-    runtime:
-      port: 6443
-      name: https
+  pingdelegator:
+    chartEnabled: true
 
 collections:
   solutions:

@@ -1,3 +1,4 @@
+{{- if not .Values.global.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
@@ -96,6 +97,12 @@ spec:
         backend:
           serviceName: {{ .Release.Name }}-pingdirectory
           servicePort: {{ include "pingports.pdApiPort" . }}
+            # Consent API
+      - path: /scim/
+        #pathType: Prefix
+        backend:
+          serviceName: {{ .Release.Name }}-pingdirectory
+          servicePort: {{ include "pingports.pdApiPort" . }}
       {{- if .Values.useCases.delegatedAdministration.enabled }}
       # Delegated Admin paths
       - path: /dadmin/
@@ -106,7 +113,8 @@ spec:
       - path: /delegator/
         #pathType: Prefix
         backend:
-          serviceName: {{ .Release.Name }}-{{ include "pingdelegator.name" .}}
-          servicePort: {{ .Values.pingdelegator.service.runtime.port }}
+          serviceName: {{ .Release.Name }}-pingdelegator
+          servicePort: {{ .Values.devops.pingdelegator.services.https.port }}
       {{- end }}
       {{- end }}
+{{- end -}}

@@ -1,3 +1,4 @@
+{{- if not .Values.global.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
@@ -57,3 +58,4 @@ spec:
       - pingdataconsole-{{ .Release.Name }}.ping-devops.com
       - pingdirectory-{{ .Release.Name }}.ping-devops.com
       - pingcentral-{{ .Release.Name }}.ping-devops.com
+{{- end -}}

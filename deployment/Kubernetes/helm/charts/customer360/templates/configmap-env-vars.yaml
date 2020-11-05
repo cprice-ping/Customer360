@@ -29,11 +29,7 @@ data:
   {{- if .Values.useCases.delegatedAdministration.enabled }}
   PD_DELEGATOR_PUBLIC_HOSTNAME: {{ include "customer360.hostname" .  | quote }}
   PF_ENGINE_PUBLIC_HOSTNAME: {{ include "customer360.hostname" .  | quote }}
-  {{- if eq ( include "pingports.pfEnginePort" . ) "443" }}
   PF_ENGINE_PUBLIC_PORT: ""
-  {{- else }}
-  PF_ENGINE_PUBLIC_PORT: {{ include "pingports.pfEnginePort" . | quote }}
-  {{- end }}
   PF_DELEGATOR_CLIENTID: "Delegator"
   PD_ENGINE_PUBLIC_HOSTNAME: {{ include "customer360.hostname" .  | quote }}
   PD_ENGINE_PUBLIC_PORT: "443"
