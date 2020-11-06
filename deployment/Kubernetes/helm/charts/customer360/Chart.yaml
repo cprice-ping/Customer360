@@ -26,7 +26,7 @@ type: application
 # 0.2.7 - switching repo to Ping official
 # 0.2.8 - refining logic and instructions for "PA as Proxy"
 # 0.3.0 - refreshing dependancies to Ping official charts 
-version: 0.3.0-beta
+version: 0.3.0-beta2
 
 # This is the version number of the application being deployed.
 appVersion: 2.1.2

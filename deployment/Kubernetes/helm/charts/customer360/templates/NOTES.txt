@@ -10,7 +10,7 @@ Product Consoles:
 {{- if .Values.pingOne.adminConsole.useMyPing }}
 My Ping: https://console.pingone.{{ include "customer360.pingOneTld" .}}/?env={{ .Values.pingOne.adminConsole.envId }}#/home?nav=home
 {{ end }}
-PingDirectory: https://pingdirectory-{{ .Release.Name }}.ping-devops.com/console
+PingDirectory: https://pingdataconsole-{{ .Release.Name }}.ping-devops.com/console
 PingFederate: https://pingfederate-{{ .Release.Name }}.ping-devops.com/pingfederate
 {{if .Values.useCases.delegatedAdministration.enabled }}
 Delegator: https://{{ include "customer360.hostname" . }}/delegator
