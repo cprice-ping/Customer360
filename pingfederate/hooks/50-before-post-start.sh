@@ -19,7 +19,7 @@ echo Hello from the server profile 50-before-post-start.sh hook!
 
 sed -e "s#class=\"org.sourceid.oauth20.domain.ClientManagerXmlFileImpl\"/>#class=\"org.sourceid.oauth20.domain.ClientManagerLdapImpl\"/>#" \
     -e "s#class=\"org.sourceid.oauth20.token.AccessGrantManagerJdbcImpl\"/>#class=\"org.sourceid.oauth20.token.AccessGrantManagerLDAPPingDirectoryImpl\"/>#" \
-    -e "s#class=\"org.sourceid.saml20.service.session.data.impl.SessionStorageManagerJdbcImpl\"/>#class=\"org.sourceid.saml20.service.session.data.impl.SessionStorageManagerLdapImpl\"/>#"\
+    -e "s#class=\"org.sourceid.saml20.service.session.data.impl.SessionStorageManagerJdbcImpl\"/>#class=\"org.sourceid.saml20.service.session.data.impl.SessionStorageManagerLdapImpl\"/>#" \
     "/opt/out/instance/server/default/conf/META-INF/hivemodule.xml" > "/opt/out/instance/server/default/conf/META-INF/hivemodule.xml-modified"
 
 mv /opt/out/instance/server/default/conf/META-INF/hivemodule.xml-modified /opt/out/instance/server/default/conf/META-INF/hivemodule.xml
